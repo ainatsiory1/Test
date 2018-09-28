@@ -1,51 +1,87 @@
 /*
-  Button
+ * MagnetControlLED.ino
+ * Example sketch for magnetic switch
+ *
+ * Copyright (c) 2012 seeed technology inc.
+ * Website    : www.seeed.cc
+ * Author     : FrankieChu
+ * Create Time: Jan 16,2013
+ * Change Log :
+ *
+ * The MIT License (MIT)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+ 
+ 
+/*****************************************************************************/
+//	Function:	 If the magnetic switch is near the magnet, the on board LED 
+//			 of the Arduino or Seeeduino will be turned on, otherwise the 
+//			 LED will be turned off.
+//	Arduino IDE: Arduino-1.0
+/*******************************************************************************/
 
-  Turns on and off a light emitting diode(LED) connected to digital pin 13,
-  when pressing a pushbutton attached to pin 2.
+/*macro definitions of magnetic pin and LED pin*/
+#define MAGNECTIC_SWITCH 9
+#define LED	13//the on board LED of the Arduino or Seeeduino
 
-  The circuit:
-  - LED attached from pin 13 to ground
-  - pushbutton attached to pin 2 from +5V
-  - 10K resistor attached to pin 2 from ground
-
-  - Note: on most Arduinos there is already an LED on the board
-    attached to pin 13.
-
-  created 2005
-  by DojoDave <http://www.0j0.org>
-  modified 30 Aug 2011
-  by Tom Igoe
-
-  This example code is in the public domain.
-
-  http://www.arduino.cc/en/Tutorial/Button
-*/
-
-// constants won't change. They're used here to set pin numbers:
-const int buttonPin = 2;     // the number of the pushbutton pin
-const int ledPin =  9;      // the number of the LED pin
-
-// variables will change:
-int buttonState = 0;         // variable for reading the pushbutton status
-
-void setup() {
-  // initialize the LED pin as an output:
-  pinMode(ledPin, OUTPUT);
-  // initialize the pushbutton pin as an input:
-  pinMode(buttonPin, INPUT);
+void setup()
+{
+ 	pinsInit();
+}
+ 
+void loop() 
+{
+	if(isNearMagnet())//if the magnetic switch is near the magnet?
+	{
+		turnOnLED();
+	}
+	else
+	{
+		turnOffLED();
+	}
+}
+void pinsInit()
+{
+	pinMode(MAGNECTIC_SWITCH, INPUT);
+	pinMode(LED,OUTPUT);
 }
 
-void loop() {
-  // read the state of the pushbutton value:
-  buttonState = digitalRead(buttonPin);
-
-  // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
-  if (buttonState == HIGH) {
-    // turn LED on:
-    digitalWrite(ledPin, HIGH);
-  } else {
-    // turn LED off:
-    digitalWrite(ledPin, LOW);
-  }
+/*If the magnetic switch is near the magnet, it will return ture, */
+/*otherwise it will return false								*/
+boolean isNearMagnet()
+{
+	int sensorValue = digitalRead(MAGNECTIC_SWITCH);
+	if(sensorValue == HIGH)//if the sensor value is HIGH?
+	{
+		return true;//yes,return ture
+	}
+	else
+	{
+		return false;//no,return false
+	}
+}
+void turnOnLED()
+{
+	digitalWrite(LED,HIGH);
+}
+void turnOffLED()
+{
+	digitalWrite(LED,LOW);
 }
